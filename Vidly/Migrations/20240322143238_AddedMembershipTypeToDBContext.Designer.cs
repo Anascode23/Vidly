@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vidly.Data;
 
@@ -10,9 +11,11 @@ using Vidly.Data;
 namespace Vidly.Migrations
 {
     [DbContext(typeof(VidlyDBContext))]
-    partial class VidlyDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240322143238_AddedMembershipTypeToDBContext")]
+    partial class AddedMembershipTypeToDBContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,37 +77,7 @@ namespace Vidly.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MembershipTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 4,
-                            DiscountRate = 0,
-                            DurationInMonths = 0,
-                            SignUpFee = 0
-                        },
-                        new
-                        {
-                            Id = 5,
-                            DiscountRate = 10,
-                            DurationInMonths = 1,
-                            SignUpFee = 30
-                        },
-                        new
-                        {
-                            Id = 6,
-                            DiscountRate = 15,
-                            DurationInMonths = 3,
-                            SignUpFee = 90
-                        },
-                        new
-                        {
-                            Id = 7,
-                            DiscountRate = 20,
-                            DurationInMonths = 12,
-                            SignUpFee = 300
-                        });
+                    b.ToTable("MmebershipTypes");
                 });
 #pragma warning restore 612, 618
         }
