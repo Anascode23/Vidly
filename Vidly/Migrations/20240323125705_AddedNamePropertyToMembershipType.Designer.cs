@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vidly.Data;
 
@@ -10,9 +11,11 @@ using Vidly.Data;
 namespace Vidly.Migrations
 {
     [DbContext(typeof(VidlyDBContext))]
-    partial class VidlyDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240323125705_AddedNamePropertyToMembershipType")]
+    partial class AddedNamePropertyToMembershipType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,16 +32,11 @@ namespace Vidly.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("MembershipTypeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MembershipTypeId");
 
                     b.ToTable("Customers");
 
@@ -46,26 +44,17 @@ namespace Vidly.Migrations
                         new
                         {
                             Id = 1,
-                            MembershipTypeId = 4,
                             Name = "Sarah"
                         },
                         new
                         {
                             Id = 2,
-                            MembershipTypeId = 5,
                             Name = "Jack"
                         },
                         new
                         {
                             Id = 3,
-                            MembershipTypeId = 6,
                             Name = "Marry"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            MembershipTypeId = 7,
-                            Name = "Salem"
                         });
                 });
 
@@ -127,17 +116,6 @@ namespace Vidly.Migrations
                             Name = "Annual",
                             SignUpFee = 300
                         });
-                });
-
-            modelBuilder.Entity("Vidly.Models.Customer", b =>
-                {
-                    b.HasOne("Vidly.Models.MembershipType", "MembershipType")
-                        .WithMany()
-                        .HasForeignKey("MembershipTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MembershipType");
                 });
 #pragma warning restore 612, 618
         }

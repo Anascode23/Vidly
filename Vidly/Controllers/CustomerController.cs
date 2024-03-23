@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Vidly.Data;
 using Vidly.Models;
 
@@ -14,7 +15,7 @@ namespace Vidly.Controllers
         }
         public IActionResult Index()
         {
-            var customerList = _vidlyDB.Customers.ToList();
+            var customerList = _vidlyDB.Customers.Include(c => c.MembershipType).ToList();
             return View(customerList);
         }
 
