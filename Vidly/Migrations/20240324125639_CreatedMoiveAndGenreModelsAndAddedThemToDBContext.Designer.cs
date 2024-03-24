@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Vidly.Data;
 
@@ -11,9 +12,11 @@ using Vidly.Data;
 namespace Vidly.Migrations
 {
     [DbContext(typeof(VidlyDBContext))]
-    partial class VidlyDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240324125639_CreatedMoiveAndGenreModelsAndAddedThemToDBContext")]
+    partial class CreatedMoiveAndGenreModelsAndAddedThemToDBContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,7 +33,7 @@ namespace Vidly.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("BirthDate")
+                    b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("MembershipTypeId")
@@ -92,28 +95,6 @@ namespace Vidly.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 5,
-                            Name = "Action"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Horror"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Adventure"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Romance"
-                        });
                 });
 
             modelBuilder.Entity("Vidly.Models.MembershipType", b =>
@@ -187,9 +168,6 @@ namespace Vidly.Migrations
                     b.Property<DateTime>("DateAdded")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GenreId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -202,47 +180,7 @@ namespace Vidly.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GenreId");
-
                     b.ToTable("Movies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DateAdded = new DateTime(2024, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 5,
-                            Name = "Iron Man",
-                            NumbersInStock = 5,
-                            ReleaseDate = new DateTime(2008, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DateAdded = new DateTime(2024, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 6,
-                            Name = "Us",
-                            NumbersInStock = 5,
-                            ReleaseDate = new DateTime(2019, 3, 22, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DateAdded = new DateTime(2024, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 7,
-                            Name = "Dora and the Lost City of Gold",
-                            NumbersInStock = 5,
-                            ReleaseDate = new DateTime(2019, 8, 9, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DateAdded = new DateTime(2024, 3, 24, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GenreId = 8,
-                            Name = "A Silent Voice",
-                            NumbersInStock = 5,
-                            ReleaseDate = new DateTime(2016, 9, 17, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("Vidly.Models.Customer", b =>
@@ -254,17 +192,6 @@ namespace Vidly.Migrations
                         .IsRequired();
 
                     b.Navigation("MembershipType");
-                });
-
-            modelBuilder.Entity("Vidly.Models.Movie", b =>
-                {
-                    b.HasOne("Vidly.Models.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Genre");
                 });
 #pragma warning restore 612, 618
         }

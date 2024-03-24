@@ -2,54 +2,54 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Vidly.Data;
 using Vidly.Models;
-using Vidly.Repository_Pattern.Implementation;
 using Vidly.Repository_Pattern.Interface;
 using Vidly.ViewModels;
 
 namespace Vidly.Controllers
 {
-    public class CustomerController : Controller
+    public class MovieController : Controller
     {
         private readonly VidlyDBContext _vidlyDB;
         private readonly IUnitOfWork _work;
 
-        public CustomerController(IUnitOfWork work)
+        public MovieController(VidlyDBContext vidlyDB, IUnitOfWork work)
         {
+            _vidlyDB = vidlyDB;
             _work = work;
         }
         public IActionResult Index()
         {
-            var customerList = _work.Customer.GetAll(includeProperties: "MembershpType").ToList();
-            return View(customerList);
+            var moiveList = _work.Movie.GetAll(includeProperties: "Genre").ToList();
+            return View(moiveList);
         }
 
         public IActionResult Create(int? id)
         {
 
-            CustomerVM customerVM = new()
+            MovieVM movieVM = new()
             {
-                MembershipTypeList = _work.Customer.GetAll()
+                GenreList = _work.Customer.GetAll()
                 .Select(c => new SelectListItem
                 {
                     Text = c.Name,
                     Value = c.Id.ToString()
                 }),
-                Customer = new Customer()
+                Movie = new Movie()
             };
             if (id == null || id == 0)
             {
-                return View(customerVM);
+                return View(movieVM);
             }
             else
             {
-                customerVM.Customer = _work.Customer.Get(u => u.Id == id);
-                return View(customerVM);
+                movieVM.Movie = _work.Movie.Get(u => u.Id == id);
+                return View(movieVM);
             }
         }
         [HttpPost]
-        public IActionResult Create(Customer customer)
+        public IActionResult Create(Movie movie)
         {
-            _vidlyDB.Customers.Add(customer);
+            _vidlyDB.Movies.Add(movie);
             _vidlyDB.SaveChanges();
             return View();
         }

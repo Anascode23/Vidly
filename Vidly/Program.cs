@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Vidly.Data;
+using Vidly.Repository_Pattern.Implementation;
+using Vidly.Repository_Pattern.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<VidlyDBContext>
     (options => options.UseSqlServer(builder.Configuration.GetConnectionString("VidlyDb")));
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
