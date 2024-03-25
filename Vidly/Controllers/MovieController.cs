@@ -26,32 +26,100 @@ namespace Vidly.Controllers
         public IActionResult Create(int? id)
         {
 
-            MovieVM movieVM = new()
-            {
-                GenreList = _work.Genre.GetAll()
-                .Select(c => new SelectListItem
-                {
-                    Text = c.Name,
-                    Value = c.Id.ToString()
-                }),
-                Movie = new Movie()
-            };
-            if (id == null || id == 0)
-            {
-                return View(movieVM);
-            }
-            else
-            {
-                movieVM.Movie = _work.Movie.Get(u => u.Id == id);
-                return View(movieVM);
-            }
+            //MovieVM MovieVM = new()
+            //{
+            //    MembershipTypeList = _work.MembershipType.GetAll()
+            //    .Select(c => new SelectListItem
+            //    {
+            //        Text = c.Name,
+            //        Value = c.Id.ToString()
+            //    }),
+            //    Movie = new Movie()
+            //};
+            //if (id == null || id == 0)
+            //{
+            //    return View(MovieVM);
+            //}
+            //else
+            //{
+            //    MovieVM.Movie = _work.Movie.Get(u => u.Id == id);
+            //    return View(MovieVM);
+            //}
+            return View();
         }
         [HttpPost]
         public IActionResult Create(Movie movie)
         {
-            _vidlyDB.Movies.Add(movie);
-            _vidlyDB.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _work.Movie.Add(movie);
+                _work.Save();
+                //  TempData["success"] = "Category was created successfully";
+                return RedirectToAction("Index");
+            }
             return View();
+        }
+        public IActionResult Edit(int? id)
+        {
+
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var MovieFromDb = _work.Movie.Get(u => u.Id == id);
+
+            if (MovieFromDb == null)
+            {
+                return NotFound();
+            }
+            return View(MovieFromDb);
+
+        }
+        [HttpPost]
+        public IActionResult Edit(Movie Movie)
+        {
+            if (ModelState.IsValid)
+            {
+                _work.Movie.Update(Movie);
+                _work.Save();
+                //  TempData["success"] = "Category was created successfully";
+                return RedirectToAction("Index");
+            }
+            return View(Movie);
+        }
+
+        public IActionResult Delete(int? id)
+        {
+
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var MovieFromDb = _work.Movie.Get(u => u.Id == id);
+
+            if (MovieFromDb == null)
+            {
+                return NotFound();
+            }
+            return View(MovieFromDb);
+
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePost(int? id)
+        {
+            var MovieFromDb = _work.Movie.Get(u => u.Id == id);
+            if (MovieFromDb == null)
+            {
+                return NotFound();
+            }
+            _work.Movie.Delete(MovieFromDb);
+            _work.Save();
+            //TempData["success"] = "Category was deleted successfully";
+            return RedirectToAction("Index");
+
+
+
         }
     }
 }

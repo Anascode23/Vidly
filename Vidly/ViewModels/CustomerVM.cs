@@ -8,6 +8,8 @@ namespace Vidly.ViewModels
     {
 
         public Customer Customer { get; set; }
+
+
         [ValidateNever]
         public IEnumerable<SelectListItem> MembershipTypeList { get; set; }
     }

@@ -1,4 +1,7 @@
-﻿namespace Vidly.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Vidly.Models
 {
     public class Movie
     {
@@ -8,6 +11,9 @@
         public DateTime ReleaseDate { get; set; }
         public DateTime DateAdded { get; set; }
 
+
+        [ValidateNever]
+        [ForeignKey("GenreId")]
         public Genre Genre { get; set; }
         public int GenreId { get; set; }
 
