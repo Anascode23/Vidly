@@ -28,7 +28,7 @@ namespace Vidly.Controllers
 
             MovieVM movieVM = new()
             {
-                GenreList = _work.Customer.GetAll()
+                GenreList = _work.Genre.GetAll()
                 .Select(c => new SelectListItem
                 {
                     Text = c.Name,

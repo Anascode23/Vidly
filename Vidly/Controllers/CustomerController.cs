@@ -19,7 +19,7 @@ namespace Vidly.Controllers
         }
         public IActionResult Index()
         {
-            var customerList = _work.Customer.GetAll(includeProperties: "MembershpType").ToList();
+            var customerList = _work.Customer.GetAll(includeProperties: "MembershipType").ToList();
             return View(customerList);
         }
 
@@ -28,7 +28,7 @@ namespace Vidly.Controllers
 
             CustomerVM customerVM = new()
             {
-                MembershipTypeList = _work.Customer.GetAll()
+                MembershipTypeList = _work.MembershipType.GetAll()
                 .Select(c => new SelectListItem
                 {
                     Text = c.Name,
