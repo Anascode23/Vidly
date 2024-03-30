@@ -15,7 +15,13 @@ namespace Vidly.Repository_Pattern.Implementation
 
         public void Update(Customer obj)
         {
-            _vidlyDB.Update(obj);
+            var objFromDb = _vidlyDB.Customers.FirstOrDefault(u => u.Id == obj.Id);
+            if (objFromDb != null)
+            {
+                objFromDb.BirthDate = obj.BirthDate;
+                objFromDb.Name = obj.Name;
+                objFromDb.MembershipTypeId = obj.MembershipTypeId;
+            }
         }
     }
 }

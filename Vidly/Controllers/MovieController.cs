@@ -23,69 +23,63 @@ namespace Vidly.Controllers
             return View(moiveList);
         }
 
-        public IActionResult Create(int? id)
+        public IActionResult Upsert(int? id)
         {
 
-            //MovieVM MovieVM = new()
-            //{
-            //    MembershipTypeList = _work.MembershipType.GetAll()
-            //    .Select(c => new SelectListItem
-            //    {
-            //        Text = c.Name,
-            //        Value = c.Id.ToString()
-            //    }),
-            //    Movie = new Movie()
-            //};
-            //if (id == null || id == 0)
-            //{
-            //    return View(MovieVM);
-            //}
-            //else
-            //{
-            //    MovieVM.Movie = _work.Movie.Get(u => u.Id == id);
-            //    return View(MovieVM);
-            //}
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Create(Movie movie)
-        {
-            if (ModelState.IsValid)
+            MovieVM movieVM = new()
             {
-                _work.Movie.Add(movie);
-                _work.Save();
-                //  TempData["success"] = "Category was created successfully";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
-        public IActionResult Edit(int? id)
-        {
-
+                GenreList = _work.Genre.GetAll()
+                .Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }),
+                Movie = new Movie()
+            };
             if (id == null || id == 0)
             {
-                return NotFound();
+                return View(movieVM);
             }
-            var MovieFromDb = _work.Movie.Get(u => u.Id == id);
-
-            if (MovieFromDb == null)
+            else
             {
-                return NotFound();
+                movieVM.Movie = _work.Movie.Get(u => u.Id == id);
+                return View(movieVM);
             }
-            return View(MovieFromDb);
 
         }
         [HttpPost]
-        public IActionResult Edit(Movie Movie)
+        public IActionResult Upsert(MovieVM obj)
         {
             if (ModelState.IsValid)
             {
-                _work.Movie.Update(Movie);
-                _work.Save();
-                //  TempData["success"] = "Category was created successfully";
+
+
+
+                if (obj.Movie.Id == 0)
+                {
+                    _work.Movie.Add(obj.Movie);
+                }
+
+                else
+                {
+                    _work.Movie.Update(obj.Movie);
+                }
+
+                _work.Save();               
+                TempData["success"] = "Movie was created successfully";
                 return RedirectToAction("Index");
             }
-            return View(Movie);
+            else
+            {
+                obj.GenreList = _work.Genre.GetAll()
+                .Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+
+                });
+                return View(obj);
+            }
         }
 
         public IActionResult Delete(int? id)

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Ignore Spelling: Upsert
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Vidly.Data;
 using Vidly.Models;
@@ -23,69 +25,63 @@ namespace Vidly.Controllers
             return View(customerList);
         }
 
-        public IActionResult Create(int? id)
+        public IActionResult Upsert(int? id)
         {
 
-            //CustomerVM customerVM = new()
-            //{
-            //    MembershipTypeList = _work.MembershipType.GetAll()
-            //    .Select(c => new SelectListItem
-            //    {
-            //        Text = c.Name,
-            //        Value = c.Id.ToString()
-            //    }),
-            //    Customer = new Customer()
-            //};
-            //if (id == null || id == 0)
-            //{
-            //    return View(customerVM);
-            //}
-            //else
-            //{
-            //    customerVM.Customer = _work.Customer.Get(u => u.Id == id);
-            //    return View(customerVM);
-            //}
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Create(Customer customer)
-        {
-            if (ModelState.IsValid)
+            CustomerVM customerVM = new()
             {
-                _work.Customer.Add(customer);
-                _work.Save();
-                //  TempData["success"] = "Category was created successfully";
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
-        public IActionResult Edit(int? id)
-        {
-
+                MembershipTypeList = _work.MembershipType.GetAll()
+                .Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+                }),
+                Customer = new Customer()
+            };
             if (id == null || id == 0)
             {
-                return NotFound();
+                return View(customerVM);
             }
-            var customerFromDb = _work.Customer.Get(u => u.Id == id);
-
-            if (customerFromDb == null)
+            else
             {
-                return NotFound();
+                customerVM.Customer = _work.Customer.Get(u => u.Id == id);
+                return View(customerVM);
             }
-            return View(customerFromDb);
 
         }
         [HttpPost]
-        public IActionResult Edit(Customer customer)
+        public IActionResult Upsert(CustomerVM obj)
         {
             if (ModelState.IsValid)
             {
-                _work.Customer.Update(customer);
+
+
+
+                if (obj.Customer.Id == 0)
+                {
+                    _work.Customer.Add(obj.Customer);
+                }
+
+                else
+                {
+                    _work.Customer.Update(obj.Customer);
+                }
+
                 _work.Save();
-                //  TempData["success"] = "Category was created successfully";
+                TempData["success"] = "Customer was created successfully";
                 return RedirectToAction("Index");
             }
-            return View(customer);
+            else
+            {
+                obj.MembershipTypeList = _work.MembershipType.GetAll()
+                .Select(c => new SelectListItem
+                {
+                    Text = c.Name,
+                    Value = c.Id.ToString()
+
+                });
+                return View(obj);
+            }
         }
 
         public IActionResult Delete(int? id)
@@ -121,5 +117,13 @@ namespace Vidly.Controllers
 
 
         }
+
+        #region API CALLS
+        public IActionResult GetAll()
+        {
+            var customerList = _work.Customer.GetAll(includeProperties: "MembershipType").ToList();
+            return Json(new { data = customerList });
+        }
+        #endregion
     }
 }
