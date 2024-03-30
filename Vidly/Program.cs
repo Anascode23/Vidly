@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Vidly.Data;
+using Vidly.Access.Data;
 using Vidly.Repository_Pattern.Implementation;
 using Vidly.Repository_Pattern.Interface;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
