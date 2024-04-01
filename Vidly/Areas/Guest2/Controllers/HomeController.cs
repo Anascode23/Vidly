@@ -4,7 +4,9 @@ using Vidly.Models;
 
 namespace Vidly.Areas.Guest.Controllers
 {
+    [Area("Guest2")]
     public class HomeController : Controller
+
     {
         private readonly ILogger<HomeController> _logger;
 
