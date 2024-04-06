@@ -82,45 +82,25 @@ namespace Vidly.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult Delete(int? id)
-        {
-
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            var customerFromDb = _work.Customer.Get(u => u.Id == id);
-
-            if (customerFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(customerFromDb);
-
-        }
-
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(int? id)
-        {
-            var customerFromDb = _work.Customer.Get(u => u.Id == id);
-            if (customerFromDb == null)
-            {
-                return NotFound();
-            }
-            _work.Customer.Delete(customerFromDb);
-            _work.Save();
-            //TempData["success"] = "Category was deleted successfully";
-            return RedirectToAction("Index");
-
-
-
-        }
 
         #region API CALLS
+        [HttpGet]
         public IActionResult GetAll()
         {
             var customerList = _work.Customer.GetAll(includeProperties: "MembershipType").ToList();
             return Json(new { data = customerList });
+        }
+        [HttpDelete]
+        public IActionResult Delete(int? id)
+        {
+            var customerToBeDelted = _work.Customer.Get(u => u.Id == id);
+            if (customerToBeDelted == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            _work.Customer.Delete(customerToBeDelted);
+            _work.Save();
+            return Json(new { success = true, message = "Delete Successful" });
         }
         #endregion
     }

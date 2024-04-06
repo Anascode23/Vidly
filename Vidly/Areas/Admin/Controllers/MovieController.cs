@@ -83,44 +83,25 @@ namespace Vidly.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult Delete(int? id)
-        {
-
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-            var MovieFromDb = _work.Movie.Get(u => u.Id == id);
-
-            if (MovieFromDb == null)
-            {
-                return NotFound();
-            }
-            return View(MovieFromDb);
-
-        }
-
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeletePost(int? id)
-        {
-            var MovieFromDb = _work.Movie.Get(u => u.Id == id);
-            if (MovieFromDb == null)
-            {
-                return NotFound();
-            }
-            _work.Movie.Delete(MovieFromDb);
-            _work.Save();
-            //TempData["success"] = "Category was deleted successfully";
-            return RedirectToAction("Index");
-
-
-
-        }
         #region API CALLS
+        [HttpGet]
         public IActionResult GetAll()
         {
-            var moiveList = _work.Movie.GetAll(includeProperties: "Genre").ToList();         
+            var moiveList = _work.Movie.GetAll(includeProperties: "Genre").ToList();
             return Json(new { data = moiveList });
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int? id)
+        {
+            var movieToBeDelted = _work.Movie.Get(u => u.Id == id);
+            if (movieToBeDelted == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            _work.Movie.Delete(movieToBeDelted);
+            _work.Save();
+            return Json(new { success = true, message = "Delete Successful" });
         }
         #endregion
     }
