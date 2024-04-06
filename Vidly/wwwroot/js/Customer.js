@@ -5,16 +5,14 @@ $(document).ready(function () {
 
 function loadDataTable() {
 
-    dataTable = $('#tbldata').DataTable({
+    dataTable = $('#tblcustomerdata').DataTable({
         "ajax": {
             url:
-                '/controller/customer/getall'
+                '/admin/customer/getall'
         },
         "columns": [
             { data: 'name', "width": "15%" },
-            { data: 'position', "width": "15%" },
-            { data: 'salary', "width": "15%" },
-            { data: 'office', "width": "15%" }
+            { data: 'membershipType.name', "width": "20%" }
 
         ]
     });

@@ -116,5 +116,12 @@ namespace Vidly.Areas.Admin.Controllers
 
 
         }
+        #region API CALLS
+        public IActionResult GetAll()
+        {
+            var moiveList = _work.Movie.GetAll(includeProperties: "Genre").ToList();         
+            return Json(new { data = moiveList });
+        }
+        #endregion
     }
 }
