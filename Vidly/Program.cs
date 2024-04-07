@@ -2,6 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Vidly.Access.Data;
 using Vidly.Repository_Pattern.Implementation;
 using Vidly.Repository_Pattern.Interface;
+using Microsoft.AspNetCore.Identity;
+using Vidly.Utility;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +13,33 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-
 builder.Services.AddDbContext<VidlyDBContext>
     (options => options.UseSqlServer(builder.Configuration.GetConnectionString("VidlyDb")));
 
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<VidlyDBContext>().AddDefaultTokenProviders();
+
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+
+
+//builder.Services.AddAuthentication().AddFacebook(opt =>
+//{
+//    opt.ClientId = "";
+//    opt.ClientSecret = "";
+//});
+
+
+builder.Services.AddRazorPages();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
@@ -31,7 +56,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

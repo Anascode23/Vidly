@@ -1,17 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Vidly.Models;
+using Vidly.Models.Models;
 
 
 namespace Vidly.Access.Data
 {
-    public class VidlyDBContext : DbContext
+    public class VidlyDBContext : IdentityDbContext<IdentityUser>
     {
-        public VidlyDBContext(DbContextOptions options) : base(options) { }
+        public VidlyDBContext(DbContextOptions<VidlyDBContext> options) : base(options) { }
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<MembershipType> MembershipTypes { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

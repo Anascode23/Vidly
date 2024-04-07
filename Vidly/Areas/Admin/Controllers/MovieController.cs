@@ -1,15 +1,18 @@
 ﻿// Ignore Spelling: Admin Vidly Upsert
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Vidly.Access.Data;
 using Vidly.Models;
 using Vidly.Repository_Pattern.Interface;
+using Vidly.Utility;
 using Vidly.ViewModels;
 
 namespace Vidly.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class MovieController : Controller
     {
         private readonly IUnitOfWork _work;
