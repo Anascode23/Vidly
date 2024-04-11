@@ -28,11 +28,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 
-//builder.Services.AddAuthentication().AddFacebook(opt =>
-//{
-//    opt.ClientId = "";
-//    opt.ClientSecret = "";
-//});
+builder.Services.AddAuthentication().AddFacebook(opt =>
+{
+    opt.ClientId = "1892404791183593";
+    opt.ClientSecret = "2267561b15bfa8aea6660347e9e75f08";
+});
 
 
 builder.Services.AddRazorPages();
